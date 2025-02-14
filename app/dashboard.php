@@ -67,7 +67,7 @@ $role = $_SESSION['role'];
                     <td><?php echo htmlspecialchars($row['description']); ?></td>
                     <td>
                         <a class="button edit" href="editar_cuestionario.php?id=<?php echo $row['quiz_id']; ?>">✏ Editar</a>
-                        <a class="button delete" href="eliminar_cuestionario.php?id=<?php echo $row['quiz_id']; ?>" onclick="return confirm('¿Estás seguro de eliminar este cuestionario?');">🗑 Eliminar</a>
+                        <a class="button delete" href="./config/process_eliminar_cuestionario.php?id=<?php echo $row['quiz_id']; ?>" onclick="return confirm('¿Estás seguro de eliminar este cuestionario?');">🗑 Eliminar</a>
                     </td>
                 </tr>
             <?php endwhile; ?>

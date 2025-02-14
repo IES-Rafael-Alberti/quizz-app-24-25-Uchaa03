@@ -73,7 +73,7 @@ CREATE TABLE users (
 );
 
 ````
-Con su agregado del role para las siguientes funcionalidades.
+Con su agregado del role para las siguientes funcionalidades que sean necesarias.
 
 ````sql
 -- Tabla de Cuestionarios
@@ -101,5 +101,22 @@ CREATE TABLE questions (
 );
 ````
 
+Agregaremos a la base datos un par de cuestionaros de ejemplo que nos paso el profesor para realizar pruebas sobre ellos
+inicialmente:
 
+````sql
+INSERT INTO quizzes (title, description, created_by) VALUES
+('Matemáticas Básicas', 'Ejercicios sobre sumas, restas y multiplicaciones.', 1),
+('Ciencia General', 'Preguntas sobre conceptos científicos básicos.', 1);
+
+INSERT INTO questions (quiz_id, question_text, option_a, option_b, option_c, option_d, correct_option) VALUES
+(1, '¿Cuánto es 5 + 3?', '6', '7', '8', '9', 'C'),
+(1, '¿Cuál es el resultado de 6 × 7?', '40', '42', '45', '48', 'B');
+
+INSERT INTO questions (quiz_id, question_text, option_a, option_b, option_c, option_d, correct_option) VALUES
+(2, '¿Cuál es el gas más abundante en la atmósfera terrestre?', 'Oxígeno', 'Nitrógeno', 'Dióxido de carbono', 'Hidrógeno', 'B'),
+(2, '¿Qué planeta es conocido como el planeta rojo?', 'Venus', 'Marte', 'Júpiter', 'Saturno', 'B');
+````
+
+## 2. Gestión de autentificación de estudiantes y profesores.
 
