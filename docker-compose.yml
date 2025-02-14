@@ -10,6 +10,11 @@ services:
       - "8080:80"
     depends_on:
       - db
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    # Para instalar la extensión de conexión a las bases de datos
+    command: >
+      sh -c "docker-php-ext-install pdo pdo_mysql && apache2-foreground"
 
   db:
     image: mysql:8
