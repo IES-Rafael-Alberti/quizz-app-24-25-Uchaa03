@@ -34,60 +34,85 @@ $questions = $stmtQuestions->fetchAll();
 <head>
     <meta charset="UTF-8">
     <title>Editar Cuestionario</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .question { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; }
-        label { font-weight: bold; }
-        textarea, input[type="text"] { width: 100%; }
-        .button { display: inline-block; padding: 8px 12px; background-color: #007bff; color: #fff; text-decoration: none; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px; }
-        .button:hover { background-color: #0056b3; }
+        body { background-color: #f8f9fa; }
+        .container { max-width: 800px; margin-top: 30px; }
+        .card { border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+        .form-control { border-radius: 8px; }
+        .btn-primary { width: 100%; }
+        .question { background-color: #fff; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .question h5 { font-size: 18px; }
     </style>
 </head>
 <body>
-<h1>Editar Cuestionario</h1>
-<form action="config/process_editar_cuestionario.php" method="post">
-    <!-- Enviamos el id del cuestionario -->
-    <input type="hidden" name="quiz_id" value="<?php echo htmlspecialchars($quiz['quiz_id']); ?>">
+<div class="container">
+    <div class="card p-4">
+        <h2 class="text-center">Editar Cuestionario</h2>
+        <form action="config/process_editar_cuestionario.php" method="post">
+            <!-- Enviar ID del cuestionario -->
+            <input type="hidden" name="quiz_id" value="<?php echo htmlspecialchars($quiz['quiz_id']); ?>">
 
-    <label>Título:</label>
-    <input type="text" name="title" value="<?php echo htmlspecialchars($quiz['title']); ?>" required><br><br>
+            <div class="mb-3">
+                <label class="form-label">Título:</label>
+                <input type="text" name="title" class="form-control" value="<?php echo htmlspecialchars($quiz['title']); ?>" required>
+            </div>
 
-    <label>Descripción:</label>
-    <textarea name="description" rows="3" required><?php echo htmlspecialchars($quiz['description']); ?></textarea><br><br>
+            <div class="mb-3">
+                <label class="form-label">Descripción:</label>
+                <textarea name="description" class="form-control" rows="3" required><?php echo htmlspecialchars($quiz['description']); ?></textarea>
+            </div>
 
-    <h2>Preguntas</h2>
-    <?php foreach ($questions as $index => $q): ?>
-        <div class="question">
-            <h3>Pregunta <?php echo $index + 1; ?></h3>
-            <!-- Enviamos el ID de la pregunta para identificarla -->
-            <input type="hidden" name="question_id[]" value="<?php echo htmlspecialchars($q['question_id']); ?>">
+            <h3 class="mt-4">Preguntas</h3>
+            <?php foreach ($questions as $index => $q): ?>
+                <div class="question border p-3">
+                    <h5>Pregunta <?php echo $index + 1; ?></h5>
+                    <input type="hidden" name="question_id[]" value="<?php echo htmlspecialchars($q['question_id']); ?>">
 
-            <label>Enunciado:</label>
-            <textarea name="question_text[]" rows="2" required><?php echo htmlspecialchars($q['question_text']); ?></textarea><br><br>
+                    <div class="mb-2">
+                        <label class="form-label">Enunciado:</label>
+                        <textarea name="question_text[]" class="form-control" rows="2" required><?php echo htmlspecialchars($q['question_text']); ?></textarea>
+                    </div>
 
-            <label>Opción A:</label>
-            <input type="text" name="option_a[]" value="<?php echo htmlspecialchars($q['option_a']); ?>" required><br><br>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Opción A:</label>
+                            <input type="text" name="option_a[]" class="form-control" value="<?php echo htmlspecialchars($q['option_a']); ?>" required>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Opción B:</label>
+                            <input type="text" name="option_b[]" class="form-control" value="<?php echo htmlspecialchars($q['option_b']); ?>" required>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Opción C:</label>
+                            <input type="text" name="option_c[]" class="form-control" value="<?php echo htmlspecialchars($q['option_c']); ?>" required>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Opción D:</label>
+                            <input type="text" name="option_d[]" class="form-control" value="<?php echo htmlspecialchars($q['option_d']); ?>" required>
+                        </div>
+                    </div>
 
-            <label>Opción B:</label>
-            <input type="text" name="option_b[]" value="<?php echo htmlspecialchars($q['option_b']); ?>" required><br><br>
+                    <div class="mb-3">
+                        <label class="form-label">Respuesta Correcta:</label>
+                        <select name="correct_option[]" class="form-select" required>
+                            <option value="A" <?php if ($q['correct_option'] == 'A') echo 'selected'; ?>>A</option>
+                            <option value="B" <?php if ($q['correct_option'] == 'B') echo 'selected'; ?>>B</option>
+                            <option value="C" <?php if ($q['correct_option'] == 'C') echo 'selected'; ?>>C</option>
+                            <option value="D" <?php if ($q['correct_option'] == 'D') echo 'selected'; ?>>D</option>
+                        </select>
+                    </div>
+                </div>
+            <?php endforeach; ?>
 
-            <label>Opción C:</label>
-            <input type="text" name="option_c[]" value="<?php echo htmlspecialchars($q['option_c']); ?>" required><br><br>
+            <button type="submit" class="btn btn-primary mt-3">Guardar Cambios</button>
+        </form>
+    </div>
+</div>
 
-            <label>Opción D:</label>
-            <input type="text" name="option_d[]" value="<?php echo htmlspecialchars($q['option_d']); ?>" required><br><br>
-
-            <label>Respuesta Correcta:</label>
-            <select name="correct_option[]" required>
-                <option value="A" <?php if ($q['correct_option'] == 'A') echo 'selected'; ?>>A</option>
-                <option value="B" <?php if ($q['correct_option'] == 'B') echo 'selected'; ?>>B</option>
-                <option value="C" <?php if ($q['correct_option'] == 'C') echo 'selected'; ?>>C</option>
-                <option value="D" <?php if ($q['correct_option'] == 'D') echo 'selected'; ?>>D</option>
-            </select>
-        </div>
-    <?php endforeach; ?>
-
-    <button type="submit" class="button">Guardar Cambios</button>
-</form>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

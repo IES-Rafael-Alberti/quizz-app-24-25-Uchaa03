@@ -1,6 +1,6 @@
 # Quiz-App-24/25 Adrián Ucha DWES
 
-## 1. **Configuración Inicial**
+## Configuración Inicial
 Vamos a crear un **docker-compose** para configurar el servidor, con una imagen de los servicios necesarios para poder 
 hacer el servidor, con la app lanzada. Para ello configuraremos el siguiente docker-compose.yml
 
@@ -73,7 +73,7 @@ CREATE TABLE users (
 );
 
 ````
-Con su agregado del role para las siguientes funcionalidades que sean necesarias.
+Con su agregado del rol para las siguientes funcionalidades que sean necesarias.
 
 ````sql
 -- Tabla de Cuestionarios
@@ -101,7 +101,22 @@ CREATE TABLE questions (
 );
 ````
 
-Agregaremos a la base datos un par de cuestionaros de ejemplo que nos paso el profesor para realizar pruebas sobre ellos
+Tenemos que crear una tabla adicional para la gestión del número de intentos
+````sql
+CREATE TABLE quiz_attempts (
+    attempt_id INT AUTO_INCREMENT PRIMARY KEY,
+    quiz_id INT NOT NULL,
+    user_id INT NOT NULL,
+    attempts INT DEFAULT 0,
+    last_attempt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (quiz_id) REFERENCES quizzes(quiz_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    UNIQUE KEY uq_quiz_user (quiz_id, user_id)
+);
+````
+
+
+Agregaremos a la base datos un par de cuestionaros de ejemplo que nos pasó el profesor para realizar pruebas sobre ellos
 inicialmente:
 
 ````sql
@@ -118,5 +133,11 @@ INSERT INTO questions (quiz_id, question_text, option_a, option_b, option_c, opt
 (2, '¿Qué planeta es conocido como el planeta rojo?', 'Venus', 'Marte', 'Júpiter', 'Saturno', 'B');
 ````
 
-## 2. Gestión de autentificación de estudiantes y profesores.
+**! A la aplicación le puse estilos con bootstrap** 
+
+## Como usar la App
+
+Es muy sencilla ejecutas el docker-compose y te creas dos usuarios, te vas a la base de datos desde el phpMyAdmin,
+y agregas las tablas, o las automatizas en el compose que es una opción, pero para evitar confusiones, creo que lo mejor
+es hacerlo manual, generas las tablas que se explican en el paso de arriba y listo ya podrás usar la app.
 

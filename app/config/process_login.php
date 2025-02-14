@@ -3,12 +3,12 @@ session_start();
 require 'db_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
+    $username = trim(isset($_POST['username']) ? $_POST['username'] : '');
+    $password = trim(isset($_POST['password']) ? $_POST['password'] : '');
 
     // Validación básica
     if (empty($username) || empty($password)) {
-        header('Location: login.php?error=missing_fields');
+        header('Location: ../login.php?error=missing_fields');
         exit();
     }
 
@@ -26,22 +26,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Guardamos los datos en la sesión
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['username'] = $user['username'];
-            $_SESSION['role'] = isset($user['role']) ? $user['role'] : 'estudiante'; // Si no tiene rol, asigna "estudiante" por defecto
+            $_SESSION['role'] = isset($user['role']) ? $user['role'] : 'estudiante'; // Valor por defecto
 
             header('Location: ../dashboard.php');
         } else {
             // Credenciales incorrectas
-            header('Location: login.php?error=invalid_credentials');
+            header('Location: ../login.php?error=invalid_credentials');
         }
         exit();
     } catch (PDOException $e) {
-        // En caso de error con la base de datos, redirigir con un error
-        error_log("Error de conexión: " . $e->getMessage()); // Para depuración
-        header('Location: login.php?error=db_error');
+        error_log("Error de conexión: " . $e->getMessage());
+        header('Location: ../login.php?error=db_error');
         exit();
     }
 } else {
-    // Si no es una petición POST, redirige al login
-    header('Location: login.php');
+    header('Location: ../login.php');
     exit();
 }

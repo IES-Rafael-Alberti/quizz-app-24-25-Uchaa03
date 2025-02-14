@@ -30,8 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             try {
                 $stmt = $pdo->prepare("INSERT INTO users (username, password) VALUES (:username, :password)");
                 $stmt->execute(['username' => $username, 'password' => $hashedPassword]);
-
-                // Redirigir al login después del registro exitoso
                 header('Location: login.php?success=registered');
                 exit();
             } catch (PDOException $e) {
@@ -41,35 +39,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Registro de Usuario</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<h1>Registro</h1>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-header text-center  bg-info">
+                    <h3>Registro</h3>
+                </div>
+                <div class="card-body">
+                    <!-- Mostrar mensajes de error si existen -->
+                    <?php if (!empty($error_msg)): ?>
+                        <div class="alert alert-danger"><?php echo $error_msg; ?></div>
+                    <?php endif; ?>
 
-<!-- Mostrar mensajes de error si existen -->
-<?php if (!empty($error_msg)): ?>
-    <p style="color:red;"><?php echo $error_msg; ?></p>
-<?php endif; ?>
+                    <form action="register.php" method="post">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Usuario:</label>
+                            <input type="text" name="username" id="username" class="form-control" value="<?php echo isset($username) ? $username : ''; ?>" required>
 
-<form action="register.php" method="post">
-    <label for="username">Usuario:</label>
-    <input type="text" name="username" id="username" value="<?php echo isset($username) ? $username : ''; ?>" required><br><br>
-
-    <label for="password">Contraseña:</label>
-    <input type="password" name="password" id="password" required><br><br>
-
-    <label for="confirm_password">Confirmar Contraseña:</label>
-    <input type="password" name="confirm_password" id="confirm_password" required><br><br>
-
-    <button type="submit">Registrarse</button>
-</form>
-
-<!-- Enlace al login -->
-<p>¿Ya tienes cuenta? <a href="login.php">Inicia sesión</a></p>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Contraseña:</label>
+                            <input type="password" name="password" id="password" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirm_password" class="form-label">Confirmar Contraseña:</label>
+                                <input type="password" name="confirm_password" id="confirm_password" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    <p>¿Ya tienes cuenta? <a href="login.php" class="text-decoration-none">Inicia sesión</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

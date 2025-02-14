@@ -18,7 +18,7 @@ try {
     // Debido a la restricción ON DELETE CASCADE, se borrarán automáticamente las preguntas asociadas.
     $stmt = $pdo->prepare("DELETE FROM quizzes WHERE quiz_id = :quiz_id");
     $stmt->execute(['quiz_id' => $quiz_id]);
-    header("Location: dashboard.php?success=quiz_deleted");
+    header("Location: ../dashboard.php");
     exit();
 } catch (PDOException $e) {
     error_log("Error deleting quiz: " . $e->getMessage());
