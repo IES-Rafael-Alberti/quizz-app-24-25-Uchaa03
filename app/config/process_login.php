@@ -20,22 +20,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Verifica si el usuario existe y si la contraseña es correcta
         if ($user && password_verify($password, $user['password'])) {
-            // Inicio de sesión exitoso
+            // Regeneramos la sesión para mayor seguridad
+            session_regenerate_id(true);
+
+            // Guardamos los datos en la sesión
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['username'] = $user['username'];
-            $_SESSION['role'] = $user['role']; // Este campo servirá para futuras comprobaciones de permisos
+            $_SESSION['role'] = isset($user['role']) ? $user['role'] : 'estudiante'; // Si no tiene rol, asigna "estudiante" por defecto
 
-            header('Location: dashboard.php');
+            header('Location: ../dashboard.php');
         } else {
             // Credenciales incorrectas
             header('Location: login.php?error=invalid_credentials');
         }
+        exit();
     } catch (PDOException $e) {
         // En caso de error con la base de datos, redirigir con un error
+        error_log("Error de conexión: " . $e->getMessage()); // Para depuración
         header('Location: login.php?error=db_error');
+        exit();
     }
 } else {
     // Si no es una petición POST, redirige al login
     header('Location: login.php');
+    exit();
 }
-exit();
